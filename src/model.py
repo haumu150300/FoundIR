@@ -1366,7 +1366,7 @@ class Trainer(object):
             tran = transforms.ToTensor()
             for items in loader:
                 if self.condition:
-                    file_ = items["B_paths"][0] 
+                    file_ = items["A_paths"][0] 
                     file_name = file_.split('/')[-3]
                 else:
                     file_name = f'{i}.png'

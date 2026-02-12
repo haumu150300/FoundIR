@@ -6,7 +6,8 @@ from data.combined_dataset import CombinedDataset
 from src.model import (ResidualDiffusion,Trainer, Unet, UnetRes,set_seed)
 def parsr_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataroot", type=str, default='./MillionIRData/Test')
+    # parser.add_argument("--dataroot", type=str, default='./MillionIRData/Test')
+    parser.add_argument("--dataroot", type=str, default='./mydata/Val_LQ')
     parser.add_argument("--phase", type=str, default='test')
     parser.add_argument("--max_dataset_size", type=int, default=float("inf"))
     parser.add_argument('--load_size', type=int, default=256, help='scale images to this size') #568
@@ -38,10 +39,10 @@ opt = parsr_args()
 results_folder = 'premodel'
 
 ## For our testset
-dataset = CombinedDataset(opt, image_size, augment_flip=False, equalizeHist=True, crop_patch=False, generation=False, task='meta_info')
+# dataset = CombinedDataset(opt, image_size, augment_flip=False, equalizeHist=True, crop_patch=False, generation=False, task='meta_info')
 
 ## For your own data
-# dataset = CombinedDataset(opt, image_size, augment_flip=False, equalizeHist=True, crop_patch=False, generation=False, task=None)
+dataset = CombinedDataset(opt, image_size, augment_flip=False, equalizeHist=True, crop_patch=False, generation=False, task=None)
 
 num_unet = 1
 objective = 'pred_res'
