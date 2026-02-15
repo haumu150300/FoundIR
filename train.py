@@ -28,7 +28,7 @@ set_seed(10)
 
 save_and_sample_every = 1000
 if len(sys.argv) > 1:
-    sampling_timesteps = int(sys.argv[1])
+    sampling_timesteps = 10
 else:
     sampling_timesteps = 10
 
