@@ -7,16 +7,17 @@ from data.combined_dataset import CombinedDataset
 
 def parsr_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataroot", type=str, default='./MillionIRData/Train')
+    # parser.add_argument("--dataroot", type=str, default='/home/ta-huuloc/hau/dataset/aio_img_restore/train')
+    parser.add_argument("--dataroot", type=str, default='train_data')
     parser.add_argument("--phase", type=str, default='train')
     parser.add_argument("--max_dataset_size", type=int, default=float("inf"))
-    parser.add_argument("--batch_size", type=int, default=80, help='batch size of dataloader')
+    parser.add_argument("--batch_size", type=int, default=2, help='batch size of dataloader')
     parser.add_argument('--load_size', type=int, default=268, help='scale images to this size') #572,268
     parser.add_argument('--crop_size', type=int, default=256, help='then crop to this size')
     parser.add_argument('--direction', type=str, default='AtoB', help='AtoB or BtoA')
     parser.add_argument('--preprocess', type=str, default='crop', help='scaling and cropping of images at load time [resize_and_crop | crop | scale_width | scale_width_and_crop | none]')
     parser.add_argument('--no_flip', action='store_true', help='if specified, do not flip the images for data augmentation')
-    parser.add_argument("--meta", type=str, default='./MillionIRData_train_meta_info.txt', help='choose data for training based on meta info')
+    parser.add_argument("--meta", type=str, default='./Trainset_meta_info.txt', help='choose data for training based on meta info')
     parser.add_argument("--bsize", type=int, default=2)
     opt = parser.parse_args()
     return opt

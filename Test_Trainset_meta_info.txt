@@ -1,0 +1,16 @@
+01Blur/GT/0001.png, 01Blur/LQ/0001.png
+01Blur/GT/1006.png, 01Blur/LQ/1006.png
+01Blur/GT/1118.png, 01Blur/LQ/1118.png
+01Blur/GT/BLUR_0003.jpg, 01Blur/LQ/BLUR_0003.jpg
+02Haze/GT/0001.png, 02Haze/LQ/0001.png
+02Haze/GT/1006.png, 02Haze/LQ/1006.png
+02Haze/GT/1118.png, 02Haze/LQ/1118.png
+03Lowlight/GT/0001.png, 03Lowlight/LQ/0001.png
+03Lowlight/GT/1006.png, 03Lowlight/LQ/1006.png
+03Lowlight/GT/1118.png, 03Lowlight/LQ/1118.png
+04Rain/GT/0001.png, 04Rain/LQ/0001.png
+04Rain/GT/1006.png, 04Rain/LQ/1006.png
+04Rain/GT/1118.png, 04Rain/LQ/1118.png
+05Snow/GT/0001.png, 05Snow/LQ/0001.png
+05Snow/GT/1006.png, 05Snow/LQ/1006.png
+05Snow/GT/1118.png, 05Snow/LQ/1118.png
