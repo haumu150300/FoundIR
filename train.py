@@ -12,7 +12,7 @@ def parsr_args():
     # parser.add_argument("--dataroot", type=str, default='train_data')
     parser.add_argument("--phase", type=str, default='train')
     parser.add_argument("--max_dataset_size", type=int, default=float("inf"))
-    parser.add_argument("--batch_size", type=int, default=8, help='batch size of dataloader')
+    parser.add_argument("--batch_size", type=int, default=6, help='batch size of dataloader')
     parser.add_argument('--load_size', type=int, default=268, help='scale images to this size') #572,268
     parser.add_argument('--crop_size', type=int, default=256, help='then crop to this size')
     parser.add_argument('--direction', type=str, default='AtoB', help='AtoB or BtoA')
@@ -47,7 +47,7 @@ dataset = CombinedDataset(opt, image_size, augment_flip=True, equalizeHist=True,
 num_unet = 1
 objective = 'pred_res'
 test_res_or_noise = "res"
-train_num_steps = 1 # for single degradation training
+train_num_steps = 500000 # for single degradation training
 # train_num_steps = 2000000 # for all training
 sum_scale = 0.01
 delta_end = 1.4e-3
