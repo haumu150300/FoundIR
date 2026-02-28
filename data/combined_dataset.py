@@ -66,6 +66,7 @@ class CombinedDataset(BaseDataset):
         if task == 'meta_info' and opt.meta is not None:
             self.dir_LQ = opt.dataroot
             self.dir_GT = opt.dataroot
+            print('opt.dataroot', opt.dataroot)
 
             self.paths = paired_paths_from_meta_info_file(
                 [self.dir_LQ, self.dir_GT], ['adap', 'gt'], opt.meta)
