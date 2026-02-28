@@ -7,7 +7,8 @@ from data.combined_dataset import CombinedDataset
 
 def parsr_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataroot", type=str, default='/home/ta-huuloc/hau/dataset/aio_img_restore/train')
+    parser.add_argument("--dataroot", type=str, default='/content/drive/MyDrive/Collab_storage/img_restoration/train')
+    # parser.add_argument("--dataroot", type=str, default='/home/ta-huuloc/hau/dataset/aio_img_restore/train')
     # parser.add_argument("--dataroot", type=str, default='train_data')
     parser.add_argument("--phase", type=str, default='train')
     parser.add_argument("--max_dataset_size", type=int, default=float("inf"))
