@@ -1212,10 +1212,10 @@ class Trainer(object):
         if self.condition:
             if opts.phase == "train":
                 if 'combined' or 'all' in results_folder:
-                    self.dl = cycle(self.accelerator.prepare(DataLoader(dataset, batch_size=self.batch_size, shuffle=True, pin_memory=True, num_workers=8)))
+                    self.dl = cycle(self.accelerator.prepare(DataLoader(dataset, batch_size=self.batch_size, shuffle=True, pin_memory=True, num_workers=2)))
                 elif 'paired' in results_folder:
-                    self.dl_light = cycle(self.accelerator.prepare(DataLoader(dataset[0], batch_size=32, shuffle=True, pin_memory=True, num_workers=8)))
-                    self.dl_night = cycle(self.accelerator.prepare(DataLoader(dataset[1], batch_size=32, shuffle=True, pin_memory=True, num_workers=8)))
+                    self.dl_light = cycle(self.accelerator.prepare(DataLoader(dataset[0], batch_size=32, shuffle=True, pin_memory=True, num_workers=2)))
+                    self.dl_night = cycle(self.accelerator.prepare(DataLoader(dataset[1], batch_size=32, shuffle=True, pin_memory=True, num_workers=2)))
                     
             else:
                 self.sample_dataset = dataset
