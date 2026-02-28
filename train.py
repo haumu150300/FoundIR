@@ -12,7 +12,7 @@ def parsr_args():
     # parser.add_argument("--dataroot", type=str, default='train_data')
     parser.add_argument("--phase", type=str, default='train')
     parser.add_argument("--max_dataset_size", type=int, default=float("inf"))
-    parser.add_argument("--batch_size", type=int, default=5, help='batch size of dataloader')
+    parser.add_argument("--batch_size", type=int, default=8, help='batch size of dataloader')
     parser.add_argument('--load_size', type=int, default=268, help='scale images to this size') #572,268
     parser.add_argument('--crop_size', type=int, default=256, help='then crop to this size')
     parser.add_argument('--direction', type=str, default='AtoB', help='AtoB or BtoA')
