@@ -7,11 +7,11 @@ from data.combined_dataset import CombinedDataset
 
 def parsr_args():
     parser = argparse.ArgumentParser()
-    # parser.add_argument("--dataroot", type=str, default='/home/ta-huuloc/hau/dataset/aio_img_restore/train')
-    parser.add_argument("--dataroot", type=str, default='train_data')
+    parser.add_argument("--dataroot", type=str, default='/home/ta-huuloc/hau/dataset/aio_img_restore/train')
+    # parser.add_argument("--dataroot", type=str, default='train_data')
     parser.add_argument("--phase", type=str, default='train')
     parser.add_argument("--max_dataset_size", type=int, default=float("inf"))
-    parser.add_argument("--batch_size", type=int, default=2, help='batch size of dataloader')
+    parser.add_argument("--batch_size", type=int, default=5, help='batch size of dataloader')
     parser.add_argument('--load_size', type=int, default=268, help='scale images to this size') #572,268
     parser.add_argument('--crop_size', type=int, default=256, help='then crop to this size')
     parser.add_argument('--direction', type=str, default='AtoB', help='AtoB or BtoA')
@@ -26,7 +26,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 sys.stdout.flush()
 set_seed(10)
 
-save_and_sample_every = 1000
+save_and_sample_every = 100
 if len(sys.argv) > 1:
     sampling_timesteps = 10
 else:
@@ -40,13 +40,13 @@ opt = parsr_args()
 train_batch_size = opt.batch_size
 print(train_batch_size)
 
-results_folder = "./ckpt_single_multi"
+results_folder = "./ckpt_single_multi_all"
 
 dataset = CombinedDataset(opt, image_size, augment_flip=True, equalizeHist=True, crop_patch=True, generation=False, task='meta_info')
 num_unet = 1
 objective = 'pred_res'
 test_res_or_noise = "res"
-train_num_steps = 500000 # for single degradation training
+train_num_steps = 1 # for single degradation training
 # train_num_steps = 2000000 # for all training
 sum_scale = 0.01
 delta_end = 1.4e-3
@@ -91,7 +91,18 @@ trainer = Trainer(
     num_unet=num_unet,
 )
 
-# train
-# trainer.load()
-# trainer.load(500) ### load from 50k steps single degradation training
-trainer.train()
+if __name__ == '__main__':
+    # train
+    # trainer.load()
+    trainer.load(500) ### load from 50k steps single degradation training
+    trainer.train()
+
+
+
+# from fvcore.nn import FlopCountAnalysis, flop_count_table
+# import torch
+# print(f"Params: {sum(p.numel() for p in model.parameters()) / 1e6:.2f} (M)")
+# x = torch.randn(1, 6, 512, 512)
+# # Calculate and print FLOPS and parameters
+# flops = FlopCountAnalysis(model, (x, torch.randn(1, 1)))
+# print(flop_count_table(flops))

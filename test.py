@@ -6,7 +6,7 @@ from data.combined_dataset import CombinedDataset
 from src.model import (ResidualDiffusion,Trainer, Unet, UnetRes,set_seed)
 def parsr_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataroot", type=str, default='./MillionIRData/Test')
+    parser.add_argument("--dataroot", type=str, default='./dataset/Val_LQ')
     parser.add_argument("--phase", type=str, default='test')
     parser.add_argument("--max_dataset_size", type=int, default=float("inf"))
     parser.add_argument('--load_size', type=int, default=256, help='scale images to this size') #568
@@ -38,10 +38,10 @@ opt = parsr_args()
 results_folder = 'premodel'
 
 ## For our testset
-dataset = CombinedDataset(opt, image_size, augment_flip=False, equalizeHist=True, crop_patch=False, generation=False, task='meta_info')
+# dataset = CombinedDataset(opt, image_size, augment_flip=False, equalizeHist=True, crop_patch=False, generation=False, task='meta_info')
 
 ## For your own data
-# dataset = CombinedDataset(opt, image_size, augment_flip=False, equalizeHist=True, crop_patch=False, generation=False, task=None)
+dataset = CombinedDataset(opt, image_size, augment_flip=False, equalizeHist=True, crop_patch=False, generation=False, task=None)
 
 num_unet = 1
 objective = 'pred_res'
@@ -96,8 +96,12 @@ trainer = Trainer(
 if not trainer.accelerator.is_local_main_process:
     pass
 else:
-    trainer.load(2000)
-    trainer.set_results_folder('./results')
-    # trainer.test(last=True, crop_phase='weight', crop_size=1024, crop_stride=512)
-    trainer.test(last=True, crop_phase='im2overlap', crop_size=1024, crop_stride=512) ## for large image test
+    ckpt = 280
+    trainer.load(ckpt)
+    rs_path = f'./result/m{ckpt}'
+    trainer.set_results_folder(rs_path)
+    if not os.path.exists(rs_path+'/Val_LQ/LQ'):
+        os.makedirs(rs_path+'/Val_LQ/LQ')
+    trainer.test(last=True, crop_phase='weight', crop_size=1024, crop_stride=512)
+    # trainer.test(last=True, crop_phase='im2overlap', crop_size=1024, crop_stride=512) ## for large image test
     # trainer.test(last=True) ## for no crop test

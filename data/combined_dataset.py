@@ -106,6 +106,14 @@ class CombinedDataset(BaseDataset):
             B_path = self.B_paths[index % self.B_size]
 
         condition = Image.open(A_path).convert('RGB') #condition
+        
+        condition_np = np.asarray(condition, dtype=np.float32) / 255.0
+        for deg_type in ['Snow', 'Rain', 'Haze', 'Lowlight']:
+            if deg_type in A_path:
+                 continue
+            condition = getattr(self, 'add_' + deg_type)(condition_np)
+        condition = Image.fromarray(np.uint8(condition*255))
+        
         gt = Image.open(B_path).convert('RGB') #gt
         
         w, h = condition.size
@@ -113,6 +121,7 @@ class CombinedDataset(BaseDataset):
         A_transform = get_transform(self.opt, transform_params, grayscale=False)
         B_transform = get_transform(self.opt, transform_params, grayscale=False)
         condition = A_transform(condition)
+      
         gt = B_transform(gt)
         if self.opt.phase == 'train':
             if h < 256 or w < 256:
@@ -124,9 +133,60 @@ class CombinedDataset(BaseDataset):
         # if self.opt.phase == 'test':
         #     if h > 1024 or w > 1024:
 
-
-                
         return {'adap': condition, 'gt': gt, 'A_paths': A_path, 'B_paths': B_path}
+
+    def add_Snow(self, img):
+        num_flakes = np.random.randint(10, 300)
+        H, W = img.shape[:2]
+        snow = np.zeros((H, W))
+
+        for _ in range(num_flakes):
+            x = np.random.randint(0, W)
+            y = np.random.randint(0, H)
+            r = np.random.randint(1, 4)
+            cv2.circle(snow, (x, y), r, 1, -1)
+
+        snow = cv2.GaussianBlur(snow, (5,5), 0)
+        snow = np.expand_dims(snow, 2)
+
+        img_snow = img * (1 - snow*0.5) + snow*0.8
+        return np.clip(img_snow, 0, 1)
+    
+    def add_Rain(self, img):
+        density = np.random.uniform(0.01, 0.05)
+        H, W = img.shape[:2]
+
+        rain = np.random.rand(H, W)
+        rain = (rain < density).astype(float)
+
+        # motion blur kernel
+        kernel_size = 15
+        kernel = np.zeros((kernel_size, kernel_size))
+        kernel[:, kernel_size//2] = 1
+        kernel /= kernel_size
+
+        rain = cv2.filter2D(rain, -1, kernel)
+
+        rain = np.expand_dims(rain, axis=2)
+        img_rain = img + rain * 0.5
+
+        return np.clip(img_rain, 0, 1)
+
+    def add_Haze(self, img):
+        H, W = img.shape[:2]
+
+        # random transmission map
+        t = np.random.uniform(0.6, 0.9, (H, W, 1))
+
+        # atmospheric light
+        A = np.random.uniform(0.7, 1.0)
+
+        hazy = img * t + A * (1 - t)
+        return hazy
+
+    def add_Lowlight(self, img):
+        alpha = np.random.uniform(0.1, 0.8)
+        return np.clip(img * alpha, 0, 1)
 
     def __len__(self):
         """Return the total number of images in the dataset."""

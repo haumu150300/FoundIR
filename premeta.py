@@ -8,7 +8,7 @@ IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff", ".webp"}
 def build_prefix(dataset: str, index: int) -> str:
     if dataset[:1].isdigit():
         return dataset
-    return f"{index:02d}{dataset}"
+    return f"{dataset}"
 
 
 def collect_pairs(root_dir: Path, dataset: str, prefix: str) -> tuple[list[str], int]:
@@ -36,7 +36,7 @@ def collect_pairs(root_dir: Path, dataset: str, prefix: str) -> tuple[list[str],
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root-dir", default="./train_data", type=str)
-    parser.add_argument("--output", default="Test_Trainset_meta_info.txt", type=str)
+    parser.add_argument("--output", default="Trainset_meta_info1.txt", type=str)
     args = parser.parse_args()
 
     root_dir = Path(args.root_dir)

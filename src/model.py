@@ -1091,7 +1091,8 @@ class ResidualDiffusion(nn.Module):
 
         b, c, h, w = x_start.shape
 
-        # noise sample
+        #4.1. Degradation-agnostic generalist model
+        # noise sample 
         x = self.q_sample(x_start, x_res, x_input, t, noise=noise) # 
 
         # predict and take gradient step
@@ -1124,7 +1125,6 @@ class ResidualDiffusion(nn.Module):
 
         elif self.objective == "pred_res":
             target.append(x_res)
-        
             pred_res = model_out[0]
 
         else:
@@ -1278,13 +1278,12 @@ class Trainer(object):
         with tqdm(initial=self.step, total=self.train_num_steps, disable=not accelerator.is_main_process) as pbar:
 
             while self.step < self.train_num_steps:
-
                 total_loss = [0]
                 
                 for _ in range(self.gradient_accumulate_every):
                     if self.condition:
                         if 'combined' or 'all' in str(results_folder):
-                            data = next(self.dl)                
+                            data = next(self.dl)   
                         elif 'paired' in str(results_folder):
                             batch1 = next(self.dl_light)
                             batch2 = next(self.dl_night)
@@ -1294,6 +1293,8 @@ class Trainer(object):
                                     data[k] = batch1[k] + batch2[k] ## data['A_paths'] = [b1_path,b2_path]
                                 else:
                                     data[k] = torch.cat([batch1[k], batch2[k]], dim=0) # data['adap'] = torch.cat([b1_adap, b2_adap], dim=0)
+                                    
+                        
                         gt = data["gt"].to(self.device)
                         cond_input = data["adap"].to(self.device)
 
@@ -1366,7 +1367,7 @@ class Trainer(object):
             tran = transforms.ToTensor()
             for items in loader:
                 if self.condition:
-                    file_ = items["B_paths"][0] 
+                    file_ = items["A_paths"][0] 
                     file_name = file_.split('/')[-3]
                 else:
                     file_name = f'{i}.png'
