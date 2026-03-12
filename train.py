@@ -3,16 +3,21 @@ import sys
 import argparse
 from src.model import (ResidualDiffusion, Trainer, Unet, UnetRes, set_seed)
 from data.combined_dataset import CombinedDataset
+# import torch.distributed as dist
 
+# dist.init_process_group(
+# backend="gloo",
+# init_method="env://?use_libuv=False"
+# )
 
 def parsr_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataroot", type=str, default='/content/drive/MyDrive/Collab_storage/img_restoration/train')
-    # parser.add_argument("--dataroot", type=str, default='/home/ta-huuloc/hau/dataset/aio_img_restore/train')
+    # parser.add_argument("--dataroot", type=str, default='/content/drive/MyDrive/Collab_storage/img_restoration/train')
+    parser.add_argument("--dataroot", type=str, default='E:\\aivn\\img-restore\\train_data')
     # parser.add_argument("--dataroot", type=str, default='train_data')
     parser.add_argument("--phase", type=str, default='train')
     parser.add_argument("--max_dataset_size", type=int, default=float("inf"))
-    parser.add_argument("--batch_size", type=int, default=6, help='batch size of dataloader')
+    parser.add_argument("--batch_size", type=int, default=4, help='batch size of dataloader')
     parser.add_argument('--load_size', type=int, default=268, help='scale images to this size') #572,268
     parser.add_argument('--crop_size', type=int, default=256, help='then crop to this size')
     parser.add_argument('--direction', type=str, default='AtoB', help='AtoB or BtoA')
@@ -23,7 +28,8 @@ def parsr_args():
     opt = parser.parse_args()
     return opt
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
+os.environ['USE_LIBUV'] = '0'
 sys.stdout.flush()
 set_seed(10)
 
